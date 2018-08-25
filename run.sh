@@ -101,11 +101,11 @@ PUBLIC_IP=${VPN_PUBLIC_IP:-''}
 check_ip "$PUBLIC_IP" || PUBLIC_IP=$(wget -t 3 -T 15 -qO- http://ipv4.icanhazip.com)
 check_ip "$PUBLIC_IP" || exiterr "Cannot detect this server's public IP. Define it in your 'env' file as 'VPN_PUBLIC_IP'."
 
-L2TP_NET=${VPN_L2TP_NET:-'192.168.42.0/24'}
-L2TP_LOCAL=${VPN_L2TP_LOCAL:-'192.168.42.1'}
-L2TP_POOL=${VPN_L2TP_POOL:-'192.168.42.10-192.168.42.250'}
-XAUTH_NET=${VPN_XAUTH_NET:-'192.168.43.0/24'}
-XAUTH_POOL=${VPN_XAUTH_POOL:-'192.168.43.10-192.168.43.250'}
+L2TP_NET=${VPN_L2TP_NET:-'10.5.12.0/32'}
+L2TP_LOCAL=${VPN_L2TP_LOCAL:-'10.5.12.1'}
+L2TP_POOL=${VPN_L2TP_POOL:-'10.5.12.10-10.5.12.50'}
+XAUTH_NET=${VPN_XAUTH_NET:-'10.5.13.9/32'}
+XAUTH_POOL=${VPN_XAUTH_POOL:-'10.5.13.10-10.5.12.50'}
 DNS_SRV1=${VPN_DNS_SRV1:-'8.8.8.8'}
 DNS_SRV2=${VPN_DNS_SRV2:-'8.8.4.4'}
 
@@ -114,7 +114,7 @@ cat > /etc/ipsec.conf <<EOF
 version 2.0
 
 config setup
-  virtual-private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!$L2TP_NET,%v4:!$XAUTH_NET
+  virtual-private=%v4:10.0.0.0/32,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:!$L2TP_NET,%v4:!$XAUTH_NET
   protostack=netkey
   interfaces=%defaultroute
   uniqueids=no
